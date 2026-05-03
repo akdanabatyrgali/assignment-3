@@ -1,0 +1,46 @@
+import java.util.Random;
+
+class MyTestingClass {
+    private int id;
+    private String name;
+
+    public MyTestingClass(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + id;
+        if (name != null) {
+            for (char c : name.toCharArray()) {
+                result = 31 * result + c;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MyTestingClass)) return false;
+        MyTestingClass that = (MyTestingClass) o;
+        return id == that.id && (name != null ? name.equals(that.name) : that.name == null);
+    }
+}
+
+class Student {}
+
+public class Main {
+    public static void main(String[] args) {
+        MyHashTable<MyTestingClass, Student> table = new MyHashTable<>(100);
+        Random rand = new Random();
+
+        for (int i = 0; i < 10000; i++) {
+            table.put(new MyTestingClass(rand.nextInt(100000), "Name" + i), new Student());
+        }
+
+        table.printBucketSizes();
+    }
+}
